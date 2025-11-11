@@ -1,0 +1,174 @@
+exit
+git clone https://github.com/upszot/UTN-FRA_SO_Examenes.git
+cd UTN-FRA_SO_Examenes/202406/
+chmod +x ./script_Precondicion.sh
+./script_Precondicion.sh
+source ~/.bashrc
+cd ~
+mkdir -p RTA_Examen_20251111/
+cd RTA_Examen_20251111/
+pwd
+cat > ~/RTA_Examen_$(date +%Y%m%d)/Punto_A.sh <<'EOF'
+chmod +x ~/RTA_Examen_$(date +%Y%m%d)/Punto_A.sh
+cat > ~/RTA_Examen_$(date +%Y%m%d)/Punto_B.sh <<'EOF'
+#!/bin/bash
+# AltaUsers script
+USUARIO_BASE="$1"
+ARCHIVO_LISTA="$2"
+
+if [ -z "$USUARIO_BASE" ] || [ -z "$ARCHIVO_LISTA" ]; then
+  echo "Uso: $0 <usuario_base> <archivo_lista>"
+  exit 1
+fi
+
+# Extraer hash de password del usuario base
+CLAVE_HASH=$(sudo awk -F: -v u="$USUARIO_BASE" ' $1==u {print $2}' /etc/shadow)
+
+while IFS=, read -r GRUPO USUARIO; do
+  [ -z "$GRUPO" ] && continue
+  [ -z "$USUARIO" ] && continue
+  sudo groupadd -f "$GRUPO"
+  # Crear usuario con la misma contraseña (hash)
+  sudo useradd -m -g "$GRUPO" -p "$CLAVE_HASH" "$USUARIO" || true
+done < "$ARCHIVO_LISTA"
+EOF
+
+chmod +x ~/RTA_Examen_$(date +%Y%m%d)/Punto_B.sh
+cat > ~/lista_prueba.txt <<EOL
+devs,juan
+devs,maria
+2PSupervisores,super1
+EOL
+
+~/RTA_Examen_$(date +%Y%m%d)/Punto_B.sh vagrant ~/lista_prueba.txt
+mkdir -p ~/UTN-FRA_SO_Examenes/202406/docker
+cat > ~/UTN-FRA_SO_Examenes/202406/docker/index.html <<'EOF'
+<html><body>
+<h1>TP2 - Alumno: Tu Nombre</h1>
+<p>Apellido: <b>Tu-Apellido</b></p>
+</body></html>
+
+su - brunoportillo
+cd ~/UTN-FRA_SO_Examenes/202406/docker
+cat > ~/UTN-FRA_SO_Examenes/202406/docker/index.html <<'EOF'
+<html><body>
+<h1>TP2 - Alumno: bruno portillo</h1>
+<p>Apellido: <b>portillo</b></p>
+</body></html>
+EOF
+
+cat > ~/UTN-FRA_SO_Examenes/202406/docker/Dockerfile <<'EOF'
+FROM nginx:latest
+COPY index.html /usr/share/nginx/html/index.html
+EOF
+
+cat > ~/UTN-FRA_SO_Examenes/202406/docker/run.sh <<'EOF'
+#!/bin/bash
+# Reemplazar <DOCKERHUB_USER> y <APELLIDO>
+docker build -t web1-<APELLIDO> .
+docker tag web1-<APELLIDO> <DOCKERHUB_USER>/web1-<APELLIDO>:latest
+docker push <DOCKERHUB_USER>/web1-<APELLIDO>:latest
+# Para ejecutar (host port 8080)
+# docker run -d -p 8080:80 <DOCKERHUB_USER>/web1-<APELLIDO>:latest
+EOF
+
+sudo apt update
+sudo apt install -y docker.io
+sudo systemctl enable docker
+sudo systemctl start docker
+docker --version
+cd ~/UTN-FRA_SO_Examenes/202406/
+mkdir -p docker
+cd docker
+cat > index.html <<'EOF'
+<html>
+  <body>
+    <h1>TP2 - Arquitectura y Sistemas Operativos</h1>
+    <p>Alumno: <b>Bruno Portillo</b></p>
+  </body>
+</html>
+EOF
+
+cat > Dockerfile <<'EOF'
+FROM nginx:latest
+COPY index.html /usr/share/nginx/html/index.html
+EOF
+
+cat > run.sh <<'EOF'
+#!/bin/bash
+docker run -d -p 8080:80 brunoportillo/web1-portillo:latest
+EOF
+
+chmod +x run.sh
+docker login
+docker build -t web1-portillo .
+docker tag web1-portillo brunoportillo/web1-portillo:latest
+docker push brunoportillo/web1-portillo:latest
+echo "./UTN-FRA_SO_Examenes/202406/docker/run.sh" > ~/RTA_Examen_20251111/Punto_C.sh
+cat > ~/UTN-FRA_SO_Examenes/202406/docker/run.sh <<'EOF'
+#!/bin/bash
+# Reemplazar <brunoportillo> y <portillo>
+docker build -t web1-<portillo> .
+docker tag web1-<portillo> <brunoportillo>/web1-<portillo>:latest
+docker push <brunoportillo>/web1-<portillo>:latest
+# Para ejecutar (host port 8080)
+# docker run -d -p 8080:80 <DOCKERHUB_USER>/web1-<APELLIDO>:latest
+EOF
+
+chmod +x ~/UTN-FRA_SO_Examenes/202406/docker/run.sh
+cd ~/UTN-FRA_SO_Examenes/202406/docker
+docker build -t web1-<portillo> .
+mkdir -p ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/{tasks,templates}
+cat > ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/tasks/main.yml <<'EOF'
+---
+- name: Crear estructura de directorios
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    mode: 0755
+  loop:
+    - /tmp/2do_parcial/alumno
+    - /tmp/2do_parcial/equipo
+
+- name: Plantilla datos_alumno
+  template:
+    src: datos_alumno.txt.j2
+    dest: /tmp/2do_parcial/alumno/datos_alumno.txt
+
+- name: Plantilla datos_equipo
+  template:
+    src: datos_equipo.txt.j2
+    dest: /tmp/2do_parcial/equipo/datos_equipo.txt
+
+- name: Sudoers - 2PSupervisores sin password
+  lineinfile:
+    path: /etc/sudoers.d/2psuper
+    create: yes
+    line: '%2PSupervisores ALL=(ALL) NOPASSWD:ALL'
+    validate: 'visudo -cf %s'
+EOF
+
+cat > ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/templates/datos_alumno.txt.j2 <<'EOF'
+Alumno: {{ ansible_user_id }}
+EOF
+
+cat > ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/templates/datos_equipo.txt.j2 <<'EOF'
+Equipo: {{ ansible_hostname }}
+EOF
+
+cd ~/UTN-FRA_SO_Examenes/202406/ansible
+cat > site.yml <<'EOF'
+- hosts: localhost
+  connection: local
+  roles:
+    - config
+EOF
+
+ansible-playbook site.yml --connection=local
+cd ~
+mkdir -p UTNFRA_SO_2do_TP_<portillo>
+mkdir -p UTNFRA_SO_2do_TP_portillo
+cp -r ~/UTN-FRA_SO_Examenes/202406 ~/UTNFRA_SO_2do_TP_portillo/
+cp -r ~/RTA_Examen_20251111/ ~/UTNFRA_SO_2do_TP_portillo/
+history -a
