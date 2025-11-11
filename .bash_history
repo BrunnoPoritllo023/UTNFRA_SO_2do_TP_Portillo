@@ -209,3 +209,72 @@ git init
 cp -r ~/UTN-FRA_SO_Examenes/202406 ~/UTNFRA_SO_2do_TP_portillo/
 cp -r ~/RTA_Examen_20251111/ ~/UTNFRA_SO_2do_TP_portillo/
 history -a
+cp ~/.bash_history ~/UTNFRA_SO_2do_TP_portillo/
+cd ~/UTNFRA_SO_2do_T
+cd ~/UTNFRA_SO_2do_TP_portillo/
+git config --global user.name "Bruno Portillo"
+git config --global user.email "brunolportillooficial@gmail.com"
+git config --list
+cd ~/UTNFRA_SO_2do_TP_portillo/
+git init
+git add .
+git commit -m "Entrega TP2 - Bruno Portillo"
+git remote add origin git@github.com:BrunnoPoritllo023/UTNFRA_SO_2do_TP_Portillo.git
+git remote -v
+git remote remove origin
+git remote add origin git@github.com:BrunnoPoritllo023/UTNFRA_SO_2do_TP_Portillo.git
+git remote -v
+git branch -M main
+git push -u origin main
+git remote set-url origin https://github.com/BrunnoPoritllo023/UTNFRA_SO_2do_TP_Portillo.git
+git remote -v
+git push -u origin main
+docker login
+login succeeded
+cat > ~/UTN-FRA_SO_Examenes/202406/docker/run.sh <<'EOF'
+#!/bin/bash
+# Script de construcción y push de imagen Docker - Bruno Portillo
+
+docker build -t web1-portillo .
+docker tag web1-portillo BrunnoPortillo023/web1-portillo:latest
+docker push BrunnoPortillo023/web1-portillo:latest
+
+# Para ejecutar (host port 8080)
+# docker run -d -p 8080:80 BrunnoPortillo023/web1-portillo:latest
+EOF
+
+chmod +x ~/UTN-FRA_SO_Examenes/202406/docker/run.sh
+cd ~/UTN-FRA_SO_Examenes/202406/docker
+bash run.sh
+docker images
+whoami
+sudo usermod -aG docker $(whoami)
+groups
+sudo usermod -aG docker brunoportillo
+getent group docker
+groups
+sudo usermod -aG docker brunoportillo
+getent group docker
+exit
+groups
+docker images
+cd ~/UTN-FRA_SO_Examenes/202406/docker/
+cat > ~/UTN-FRA_SO_Examenes/202406/docker/run.sh <<'EOF'
+#!/bin/bash
+# Script de construcción y push de imagen Docker - Bruno Portillo
+
+docker build -t web1-portillo .
+docker tag web1-portillo BrunnoPortillo023/web1-portillo:latest
+docker push BrunnoPortillo023/web1-portillo:latest
+
+# Para ejecutar (host port 8080)
+# docker run -d -p 8080:80 BrunnoPortillo023/web1-portillo:latest
+EOF
+
+chmod +x ~/UTN-FRA_SO_Examenes/202406/docker/run.sh
+cd ~/UTN-FRA_SO_Examenes/202406/docker
+bash run.sh
+docker images
+cd ~/UTNFRA_SO_2do_TP_portillo/
+cp ~/UTN-FRA_SO_Examenes/202406/docker/run.sh ~/UTNFRA_SO_2do_TP_portillo/
+history -a
