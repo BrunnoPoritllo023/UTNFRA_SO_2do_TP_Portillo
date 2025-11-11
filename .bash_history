@@ -62,16 +62,6 @@ FROM nginx:latest
 COPY index.html /usr/share/nginx/html/index.html
 EOF
 
-cat > ~/UTN-FRA_SO_Examenes/202406/docker/run.sh <<'EOF'
-#!/bin/bash
-# Reemplazar <DOCKERHUB_USER> y <APELLIDO>
-docker build -t web1-<APELLIDO> .
-docker tag web1-<APELLIDO> <DOCKERHUB_USER>/web1-<APELLIDO>:latest
-docker push <DOCKERHUB_USER>/web1-<APELLIDO>:latest
-# Para ejecutar (host port 8080)
-# docker run -d -p 8080:80 <DOCKERHUB_USER>/web1-<APELLIDO>:latest
-EOF
-
 sudo apt update
 sudo apt install -y docker.io
 sudo systemctl enable docker
@@ -107,17 +97,17 @@ docker push brunoportillo/web1-portillo:latest
 echo "./UTN-FRA_SO_Examenes/202406/docker/run.sh" > ~/RTA_Examen_20251111/Punto_C.sh
 cat > ~/UTN-FRA_SO_Examenes/202406/docker/run.sh <<'EOF'
 #!/bin/bash
-# Reemplazar <brunoportillo> y <portillo>
-docker build -t web1-<portillo> .
-docker tag web1-<portillo> <brunoportillo>/web1-<portillo>:latest
-docker push <brunoportillo>/web1-<portillo>:latest
+# Reemplazar brunoportillo y portillo
+docker build -t web1-portillo .
+docker tag web1-portillo brunoportillo/web1-portillo:latest
+docker push blankito023/web1-portillo:latest
 # Para ejecutar (host port 8080)
-# docker run -d -p 8080:80 <DOCKERHUB_USER>/web1-<APELLIDO>:latest
+# docker run -d -p 8080:80 DOCKERHUB_USER/web1-APELLIDO:latest
 EOF
 
 chmod +x ~/UTN-FRA_SO_Examenes/202406/docker/run.sh
 cd ~/UTN-FRA_SO_Examenes/202406/docker
-docker build -t web1-<portillo> .
+docker build -t web1-portillo .
 mkdir -p ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/{tasks,templates}
 cat > ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/tasks/main.yml <<'EOF'
 ---
