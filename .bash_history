@@ -12,7 +12,6 @@ cat > ~/RTA_Examen_$(date +%Y%m%d)/Punto_A.sh <<'EOF'
 chmod +x ~/RTA_Examen_$(date +%Y%m%d)/Punto_A.sh
 cat > ~/RTA_Examen_$(date +%Y%m%d)/Punto_B.sh <<'EOF'
 #!/bin/bash
-# AltaUsers script
 USUARIO_BASE="$1"
 ARCHIVO_LISTA="$2"
 
@@ -21,14 +20,12 @@ if [ -z "$USUARIO_BASE" ] || [ -z "$ARCHIVO_LISTA" ]; then
   exit 1
 fi
 
-# Extraer hash de password del usuario base
 CLAVE_HASH=$(sudo awk -F: -v u="$USUARIO_BASE" ' $1==u {print $2}' /etc/shadow)
 
 while IFS=, read -r GRUPO USUARIO; do
   [ -z "$GRUPO" ] && continue
   [ -z "$USUARIO" ] && continue
   sudo groupadd -f "$GRUPO"
-  # Crear usuario con la misma contraseña (hash)
   sudo useradd -m -g "$GRUPO" -p "$CLAVE_HASH" "$USUARIO" || true
 done < "$ARCHIVO_LISTA"
 EOF
@@ -97,7 +94,6 @@ docker push brunoportillo/web1-portillo:latest
 echo "./UTN-FRA_SO_Examenes/202406/docker/run.sh" > ~/RTA_Examen_20251111/Punto_C.sh
 cat > ~/UTN-FRA_SO_Examenes/202406/docker/run.sh <<'EOF'
 #!/bin/bash
-# Reemplazar brunoportillo y portillo
 docker build -t web1-portillo .
 docker tag web1-portillo brunoportillo/web1-portillo:latest
 docker push blankito023/web1-portillo:latest
