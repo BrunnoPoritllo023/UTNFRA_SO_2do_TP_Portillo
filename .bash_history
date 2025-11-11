@@ -8,7 +8,7 @@ cd ~
 mkdir -p RTA_Examen_20251111/
 cd RTA_Examen_20251111/
 pwd
-cat > ~/RTA_Examen_$(date +%Y%m%d)/Punto_A.sh <<'EOF'
+cat > ~/RTA_Examen_20251111/Punto_A.sh <<'EOF'
 
 set -e
 
@@ -38,11 +38,9 @@ echo "/dev/vg_datos/lv_workareas /work ext4 defaults 0 0" | sudo tee -a /etc/fst
 echo "/dev/vg_datos/lv_swap none swap sw 0 0" | sudo tee -a /etc/fstab
 EOF
 
-chmod +x ~/RTA_Examen_$(date +%Y%m%d)/Punto_A.sh
+chmod +x ~/RTA_Examen_20251111/Punto_A.sh
 
-cat > ~/RTA_Examen_$(date +%Y%m%d)/Punto_A.sh <<'EOF'
-chmod +x ~/RTA_Examen_$(date +%Y%m%d)/Punto_A.sh
-cat > ~/RTA_Examen_$(date +%Y%m%d)/Punto_B.sh <<'EOF'
+cat > ~/RTA_Examen_20251111/Punto_B.sh <<'EOF'
 USUARIO_BASE="$1"
 ARCHIVO_LISTA="$2"
 
@@ -61,7 +59,7 @@ while IFS=, read -r GRUPO USUARIO; do
 done < "$ARCHIVO_LISTA"
 EOF
 
-chmod +x ~/RTA_Examen_$(date +%Y%m%d)/Punto_B.sh
+chmod +x ~/RTA_Examen_20251111/Punto_B.sh
 
 cat > ~/lista_prueba.txt <<EOL
 devs,juan
@@ -69,7 +67,7 @@ devs,maria
 2PSupervisores,super1
 EOL
 
-~/RTA_Examen_$(date +%Y%m%d)/Punto_B.sh vagrant ~/lista_prueba.txt
+~/RTA_Examen_20251111/Punto_B.sh vagrant ~/lista_prueba.txt
 mkdir -p ~/UTN-FRA_SO_Examenes/202406/docker
 cat > ~/UTN-FRA_SO_Examenes/202406/docker/index.html <<'EOF'
 <html><body>
@@ -185,7 +183,7 @@ EOF
 
 ansible-playbook site.yml --connection=local
 cd ~
-mkdir -p UTNFRA_SO_2do_TP_<portillo>
+mkdir -p UTNFRA_SO_2do_TP_portillo
 mkdir -p UTNFRA_SO_2do_TP_portillo
 cp -r ~/UTN-FRA_SO_Examenes/202406 ~/UTNFRA_SO_2do_TP_portillo/
 cp -r ~/RTA_Examen_20251111/ ~/UTNFRA_SO_2do_TP_portillo/
