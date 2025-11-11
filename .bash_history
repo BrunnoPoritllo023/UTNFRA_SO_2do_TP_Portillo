@@ -44,8 +44,8 @@ EOL
 mkdir -p ~/UTN-FRA_SO_Examenes/202406/docker
 cat > ~/UTN-FRA_SO_Examenes/202406/docker/index.html <<'EOF'
 <html><body>
-<h1>TP2 - Alumno: Tu Nombre</h1>
-<p>Apellido: <b>Tu-Apellido</b></p>
+<h1>TP2 - Alumno: brunoportillo</h1>
+<p>Apellido: <b>portillo</b></p>
 </body></html>
 
 su - brunoportillo
