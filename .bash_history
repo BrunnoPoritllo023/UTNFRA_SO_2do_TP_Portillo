@@ -172,3 +172,40 @@ mkdir -p UTNFRA_SO_2do_TP_portillo
 cp -r ~/UTN-FRA_SO_Examenes/202406 ~/UTNFRA_SO_2do_TP_portillo/
 cp -r ~/RTA_Examen_20251111/ ~/UTNFRA_SO_2do_TP_portillo/
 history -a
+cp ~/.bash_history ~/UTNFRA_SO_2do_TP_portillo/
+cd UTNFRA_SO_2do_TP_portillo/
+git init
+git add .
+git commit -m "Entrega TP2 - portillo"
+git remote add origin https://github.com/BrunnoPoritllo023/UTNFRA_SO_2do_TP_Portillo.git
+git branch -M main
+git push -u origin main
+git config --global user.name "Bruno Portillo"
+git config --global user.email "brunolportillooficial@gmail.com"
+git config --list
+git remote set-url origin https://github.com/BrunnoPortillo023/UTNFRA_SO_2do_TP_portillo.git
+git add .
+git commit -m "Entrega TP2 - Bruno Portillo"
+git branch -M main
+git push -u origin main
+git remote set-url origin https://github.com/BrunnoPoritllo023/UTNFRA_SO_2do_TP_Portillo.git
+git add .
+git commit -m "Entrega TP2 - Bruno Portillo"
+git branch -M main
+git push -u origin main
+exit
+cp -r ~/UTN-FRA_SO_Examenes/202406 ~/UTNFRA_SO_2do_TP_portillo/
+cp -r ~/RTA_Examen_20251111/ ~/UTNFRA_SO_2do_TP_portillo/
+history -a
+cp ~/.bash_history ~/UTNFRA_SO_2do_TP_portillo/
+cd ~/UTNFRA_SO_2do_TP_portillo/
+ls
+git config --global user.name "Bruno Portillo"
+git config --global user.email "brunolportillooficial@gmail.com"
+git config --list
+cd ~/UTNFRA_SO_2do_TP_Portillo
+cd ~/UTNFRA_SO_2do_TP_portillo/
+git init
+cp -r ~/UTN-FRA_SO_Examenes/202406 ~/UTNFRA_SO_2do_TP_portillo/
+cp -r ~/RTA_Examen_20251111/ ~/UTNFRA_SO_2do_TP_portillo/
+history -a
