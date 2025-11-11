@@ -268,3 +268,6 @@ docker images
 cd ~/UTNFRA_SO_2do_TP_portillo/
 cp ~/UTN-FRA_SO_Examenes/202406/docker/run.sh ~/UTNFRA_SO_2do_TP_portillo/
 history -a
+
+cd ~/UTNFRA_SO_2do_TP_portillo
+tree -a
