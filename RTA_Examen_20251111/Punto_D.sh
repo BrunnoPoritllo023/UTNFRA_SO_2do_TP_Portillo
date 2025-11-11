@@ -1,0 +1,38 @@
+mkdir -p ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/{tasks,templates}
+cat > ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/tasks/main.yml <<'EOF'
+---
+- name: Crear estructura de directorios
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    mode: 0755
+  loop:
+    - /tmp/2do_parcial/alumno
+    - /tmp/2do_parcial/equipo
+
+- name: Plantilla datos_alumno
+  template:
+    src: datos_alumno.txt.j2
+    dest: /tmp/2do_parcial/alumno/datos_alumno.txt
+
+- name: Plantilla datos_equipo
+  template:
+    src: datos_equipo.txt.j2
+    dest: /tmp/2do_parcial/equipo/datos_equipo.txt
+
+- name: Sudoers - 2PSupervisores sin password
+  lineinfile:
+    path: /etc/sudoers.d/2psuper
+    create: yes
+    line: '%2PSupervisores ALL=(ALL) NOPASSWD:ALL'
+    validate: 'visudo -cf %s'
+EOF
+
+cat > ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/templates/datos_alumno.txt.j2 <<'EOF'
+Alumno: {{ ansible_user_id }}
+EOF
+
+cat > ~/UTN-FRA_SO_Examenes/202406/ansible/roles/config/templates/datos_equipo.txt.j2 <<'EOF'
+Equipo: {{ ansible_hostname }}
+EOF
